@@ -43,18 +43,7 @@ public abstract class AbstractApiRequestService<T> {
 
 
     public static void main(String[] args) {
-        String token = "ODM5OTk2NjdjNzkyY2NhMzU1MzY5NmM3NjY3YzFlMDU=";
 
-        String method = "postProductSender";
-
-        String dateStr = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-
-        String dstr = dateStr.substring(0, 17) + "00";
-
-        String str = token+method+dstr;
-
-        token = DigestUtils.md5Hex(DigestUtils.md5Hex(DigestUtils.md5Hex(str)));
-        log.debug(token);
     }
 
 

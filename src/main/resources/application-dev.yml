@@ -3,7 +3,8 @@ server:
 
 logging:
   level:
-    root: debug
+    root: info
+    com.ylsm.*: DEBUG
 
 
 spring:
@@ -19,5 +20,8 @@ spring:
 docking:
   account: account
   password: password
+  token:
+    expire:
+      limit: 90 # 60 分钟过期一次
   api:
     host: http://ylsm.api.ing:40002/mps-interfaces
