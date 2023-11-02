@@ -1,0 +1,23 @@
+server:
+  port: 8300
+
+logging:
+  level:
+    root: debug
+
+
+spring:
+  application:
+    name: ylsm-api-docking
+
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost\MSSQLSERVER:1433;database=ylsm_api_docking;encrypt=false
+    username: sa
+    password: zxcvbnm
+
+docking:
+  account: account
+  password: password
+  api:
+    host: http://ylsm.api.ing:40002/mps-interfaces
