@@ -42,16 +42,24 @@ public class TokenService  extends AbstractApiRequestService {
 
     private static Long LAST_UPDATE_TIME = null;
 
+
     public synchronized TokenModel getTokenInfo() {
-        int count = 0;
-        while (isExpire() || Objects.isNull(tokenInfo) || tokenInfo.contentHasEmpty()) {
-            count ++;
+        return getTokenInfo(false);
+    }
+
+    public synchronized TokenModel getTokenInfo(boolean force) {
+        int count = 1;
+        while (force || isExpire() || Objects.isNull(tokenInfo) || tokenInfo.contentHasEmpty()) {
             // todo 可配置
             if (count > retry) {
                 log.error("get token error on request api {} time!", retry);
                 throw new RuntimeException(String.format("get token error on %s times!", retry));
             }
-            refreshToken();
+            if (refreshToken()) {
+                force = false;
+            } else {
+                count ++;
+            }
         }
         TokenModel model = new TokenModel();
         BeanUtils.copyProperties(tokenInfo, model);
@@ -65,11 +73,11 @@ public class TokenService  extends AbstractApiRequestService {
         return System.currentTimeMillis() - LAST_UPDATE_TIME > limit*60*100;
     }
 
-    private void refreshToken() {
+    private boolean refreshToken() {
         String s = apiFeignClient.getTokenInfo(account, password);
         if (StringUtils.isBlank(s)) {
             log.error("request token/getTokenInfo api error, result is empty! account:{}, pass:{}, responseData:{}", account, password, s);
-            return;
+            return false;
         }
         ApiResult<TokenModel> result = null;
         try {
@@ -79,10 +87,11 @@ public class TokenService  extends AbstractApiRequestService {
         }
         if (Objects.isNull(result) || !result.success() || Objects.isNull(result.getData())) {
             log.error("get token info result error. account:{}, pass:{}, responseData:{}, result:{}", account, password, s, result);
-            return;
+            return false;
         }
         BeanUtils.copyProperties(result.getData(), tokenInfo);
         LAST_UPDATE_TIME = System.currentTimeMillis();
+        return true;
     }
 
     @Data

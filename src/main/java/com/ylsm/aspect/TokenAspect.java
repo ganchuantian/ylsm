@@ -12,6 +12,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.expression.CachedExpressionEvaluator;
+import org.springframework.core.env.Environment;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -22,16 +29,17 @@ import java.util.Objects;
 @Aspect
 @Component
 @Slf4j
-public class TokenAspect {
+public class TokenAspect implements EnvironmentAware {
 
+    private Environment environment;
 
     @Pointcut("@annotation(com.ylsm.annotation.YlsmToken)")
     public void tokenPointcut() {
 
     }
 
-    @Around("tokenPointcut()")
-    public Object token(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("tokenPointcut() && @annotation(ylsmToken)")
+    public Object token(ProceedingJoinPoint joinPoint, YlsmToken ylsmToken) throws Throwable {
         Object[] objects = joinPoint.getArgs();
         if (Objects.isNull(objects) || objects.length == 0) {
             return joinPoint.proceed();
@@ -39,8 +47,7 @@ public class TokenAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         signature.getDeclaringType();
         Method method = signature.getMethod();
-        YlsmToken ylsmToken = method.getAnnotation(YlsmToken.class);
-        String route = ylsmToken.value();
+        String route = environment.resolvePlaceholders(ylsmToken.value());
         Parameter[] parameters = method.getParameters();
         if (Objects.nonNull(parameters) && parameters.length > 0) {
             for (int i = 0; i < parameters.length; i++) {
@@ -57,4 +64,8 @@ public class TokenAspect {
         return joinPoint.proceed(objects);
     }
 
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 }

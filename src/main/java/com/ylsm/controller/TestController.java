@@ -41,9 +41,24 @@ public class TestController {
         return apiFeignClient.getTokenInfo(account, password);
     }
 
-    @GetMapping("/a")
+    @GetMapping("/1")
     public String a() {
+        return proxyService.cloudSender(new Date(), new Date());
+    }
+
+    @GetMapping("/2")
+    public String a2() {
         return proxyService.productInfoSender(new Date(), new Date());
+    }
+
+    @GetMapping("/3")
+    public String a3() {
+        return proxyService.postProductSender(new Date(), new Date());
+    }
+
+    @GetMapping("/4")
+    public String a4() {
+        return proxyService.rejectProductSender(new Date(), new Date());
     }
 
 }

@@ -17,6 +17,15 @@ spring:
     username: sa
     password: zxcvbnm
 
+feign:
+  host: http://ylsm.api.ing:40002/mps-interfaces
+  name: client
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 30000
+
 docking:
   account: account
   password: password
@@ -24,4 +33,24 @@ docking:
     expire:
       limit: 90 # 60 分钟过期一次
   api:
-    host: http://ylsm.api.ing:40002/mps-interfaces
+    module:
+      token:
+        route: /token/getTokenInfo
+      updateStock:
+        route: /outer/updateStock
+        method: updateStock
+      saleSheet:
+        route: /outer/saleSheet
+        method: saleSheet
+      cloundSender:
+        route: /outer/cloundSender
+        method: cloundSender
+      productInfoSender:
+        route: /outer/productInfoSender
+        method: productInfoSender
+      postProductSender:
+        route: /outer/postProductSender
+        method: postProductSender
+      rejectProductSender:
+        route: /outer/rejectProductSender
+        method: rejectProductSender
