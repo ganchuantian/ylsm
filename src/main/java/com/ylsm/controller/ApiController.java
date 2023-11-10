@@ -1,13 +1,18 @@
 package com.ylsm.controller;
 
 import com.ylsm.api.ApiFeignClient;
+import com.ylsm.constants.Constants;
+import com.ylsm.model.vo.ApiParamVo;
 import com.ylsm.service.ApiRequestProxyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.TimeZone;
+import java.util.spi.TimeZoneNameProvider;
 
 
 @Slf4j
@@ -28,41 +33,28 @@ public class ApiController {
     public void setProxyService(ApiRequestProxyService apiRequestProxyService) {
         this.proxyService = apiRequestProxyService;
     }
-    @Value("${docking.account}")
-    private String account;
-
-    @Value("${docking.password}")
-    private String password;
 
     @CrossOrigin
     @PostMapping("")
-    public String api() {
+    public String api(@RequestBody ApiParamVo vo) {
+        log.trace("param is :{}", vo);
+        switch (vo.getType()) {
+            case CLOUD_SENDER:
+                proxyService.cloudSender(vo.getQueryStartDate(), vo.getQueryEndDate());
+                break;
+            case POST_PRODUCT_SENDER:
+                proxyService.postProductSender(vo.getQueryStartDate(), vo.getQueryEndDate());
+                break;
+            case PRODUCE_INFO_SENDER:
+                proxyService.productInfoSender(vo.getQueryStartDate(), vo.getQueryEndDate());
+                break;
+            case REJECT_PRODUCT_SENDER:
+                proxyService.rejectProductSender(vo.getQueryStartDate(), vo.getQueryEndDate());
+                break;
+            default:
+                break;
+        }
         return "";
-    }
-
-    @GetMapping("/tt")
-    public String test() {
-        return apiFeignClient.getTokenInfo(account, password);
-    }
-
-    @GetMapping("/1")
-    public String a() {
-        return proxyService.cloudSender(new Date(), new Date());
-    }
-
-    @GetMapping("/2")
-    public String a2() {
-        return proxyService.productInfoSender(new Date(), new Date());
-    }
-
-    @GetMapping("/3")
-    public String a3() {
-        return proxyService.postProductSender(new Date(), new Date());
-    }
-
-    @GetMapping("/4")
-    public String a4() {
-        return proxyService.rejectProductSender(new Date(), new Date());
     }
 
 }

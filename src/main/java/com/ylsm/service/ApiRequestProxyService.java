@@ -9,6 +9,7 @@ import com.ylsm.model.TokenModel;
 import com.ylsm.untils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +30,9 @@ public class ApiRequestProxyService {
 
     @Autowired
     private TokenService tokenService;
+
+    @Value("${spring.jackson.date-format: yyyy-MM-dd}")
+    private String dateFormat;
 
     /**
      * 同步库存
@@ -52,28 +56,27 @@ public class ApiRequestProxyService {
 
     public String cloudSender(Date queryStartDate, Date queryEndDate){
         TokenModel model = tokenService.getTokenInfo();
-        return feignClient.cloudSender(model.getToken(), model.getTokenId(), DateUtils.format("yyyy-MM-dd", queryStartDate), DateUtils.format("yyyy-MM-dd", queryEndDate));
+        return feignClient.cloudSender(model.getToken(), model.getTokenId(), DateUtils.format(dateFormat, queryStartDate), DateUtils.format(dateFormat, queryEndDate));
     }
 
     /*商品档案*/
 
     public String productInfoSender(Date queryStartDate, Date queryEndDate){
         TokenModel model = tokenService.getTokenInfo();
-        return feignClient.productInfoSender(model.getToken(), model.getTokenId(), DateUtils.format("yyyy-MM-dd", queryStartDate), DateUtils.format("yyyy-MM-dd", queryEndDate));
+        return feignClient.productInfoSender(model.getToken(), model.getTokenId(), DateUtils.format(dateFormat, queryStartDate), DateUtils.format(dateFormat, queryEndDate));
     }
 
     /*发货单*/
 
     public String postProductSender(Date queryStartDate, Date queryEndDate){
         TokenModel model = tokenService.getTokenInfo();
-        return feignClient.postProductSender(model.getToken(), model.getTokenId(), DateUtils.format("yyyy-MM-dd", queryStartDate), DateUtils.format("yyyy-MM-dd", queryEndDate));
+        return feignClient.postProductSender(model.getToken(), model.getTokenId(), DateUtils.format(dateFormat, queryStartDate), DateUtils.format(dateFormat, queryEndDate));
     }
 
     /*退货单*/
-
     public String rejectProductSender(Date queryStartDate, Date queryEndDate){
         TokenModel model = tokenService.getTokenInfo();
-        return feignClient.rejectProductSender(model.getToken(), model.getTokenId(), DateUtils.format("yyyy-MM-dd", queryStartDate), DateUtils.format("yyyy-MM-dd", queryEndDate));
+        return feignClient.rejectProductSender(model.getToken(), model.getTokenId(), DateUtils.format(dateFormat, queryStartDate), DateUtils.format(dateFormat, queryEndDate));
     }
 
 }

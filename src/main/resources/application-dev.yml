@@ -3,7 +3,7 @@ server:
 
 logging:
   level:
-    root: debug
+    root: info
     com.ylsm.*: DEBUG
 
 
@@ -16,6 +16,9 @@ spring:
     url: jdbc:sqlserver://localhost\MSSQLSERVER:1433;database=ylsm_api_docking;encrypt=false
     username: sa
     password: zxcvbnm
+  jackson:
+    date-format: yyyy-MM-dd
+    time-zone: Asia/Chongqing
 
 feign:
   host: http://ylsm.api.ing:40002/mps-interfaces
@@ -23,7 +26,7 @@ feign:
   client:
     config:
       default:
-        connectTimeout: 60000
+        connectTimeout: 10000
         readTimeout: 30000
 
 docking:

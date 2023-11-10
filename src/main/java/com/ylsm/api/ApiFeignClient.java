@@ -27,7 +27,7 @@ public interface ApiFeignClient {
     String saleSheet(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("channelCode") String channelCode, @RequestParam("jsonRequest") String jsonRequest, @RequestParam("manualId") String manualId, @RequestParam("saleDate") String saleDate);
 
     /*云仓单接口*/
-    @PostMapping("${docking.api.module.cloudSender.route}")
+    @PostMapping("${docking.api.module.cloundSender.route}")
     @YlsmToken("${docking.api.module.cloudSender.method}")
     String cloudSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
 
