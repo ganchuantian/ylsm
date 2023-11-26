@@ -2,8 +2,6 @@ package com.ylsm.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ylsm.annotation.TokenField;
-import com.ylsm.annotation.YlsmToken;
 import com.ylsm.api.ApiFeignClient;
 import com.ylsm.model.TokenModel;
 import com.ylsm.untils.DateUtils;
@@ -11,11 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service

@@ -3,12 +3,20 @@ package com.ylsm.api;
 import com.ylsm.annotation.TokenField;
 import com.ylsm.annotation.YlsmToken;
 import com.ylsm.config.FeignConfig;
+import com.ylsm.model.api.ApiResult;
+import com.ylsm.model.bo.GoodsBO;
+import com.ylsm.model.bo.OrderBO;
+import com.ylsm.model.bo.RejectProductBO;
+import com.ylsm.model.bo.SaleOrderBO;
 import feign.codec.StringDecoder;
+import feign.gson.GsonDecoder;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(url="${feign.host}", name = "${feign.name}", configuration = {StringDecoder.class, FeignConfig.class})
+import java.util.Collection;
+
+@FeignClient(url="${feign.host}", name = "${feign.name}", configuration = {GsonDecoder.class, FeignConfig.class})
 public interface ApiFeignClient {
 
     /*获取 token*/
@@ -29,20 +37,20 @@ public interface ApiFeignClient {
     /*云仓单接口*/
     @PostMapping("${docking.api.module.cloundSender.route}")
     @YlsmToken("${docking.api.module.cloudSender.method}")
-    String cloudSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
+    ApiResult<Collection<SaleOrderBO>> cloudSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
 
     /*商品档案*/
     @PostMapping("${docking.api.module.productInfoSender.route}")
     @YlsmToken("${docking.api.module.productInfoSender.method}")
-    String productInfoSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
+    ApiResult<Collection<GoodsBO>> productInfoSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
 
     /*发货单*/
     @PostMapping("${docking.api.module.postProductSender.route}")
     @YlsmToken("${docking.api.module.postProductSender.method}")
-    String postProductSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
+    ApiResult<Collection<OrderBO>> postProductSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
 
     /*退货单*/
     @PostMapping("${docking.api.module.rejectProductSender.route}")
     @YlsmToken("${docking.api.module.rejectProductSender.method}")
-    String rejectProductSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
+    ApiResult<Collection<RejectProductBO>> rejectProductSender(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("queryStartDate") String queryStartDate, @RequestParam("queryEndDate") String queryEndDate);
 }
