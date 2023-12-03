@@ -57,3 +57,6 @@ docking:
       rejectProductSender:
         route: /outer/rejectProductSender
         method: rejectProductSender
+
+sleep-time: 3000L
+select-size: 2000

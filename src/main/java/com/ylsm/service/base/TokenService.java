@@ -1,4 +1,4 @@
-package com.ylsm.service;
+package com.ylsm.service.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Service
 @Slf4j
-public class TokenService  extends AbstractApiRequestService {
+public class TokenService {
 
     @Value("${docking.account}")
     private String account;
