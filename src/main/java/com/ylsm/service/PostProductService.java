@@ -27,6 +27,9 @@ public class PostProductService {
     @Autowired
     private ApiRequestProxyService requestProxyService;
 
+    @Autowired
+    private AutoTaskRecordService autoTaskRecordService;
+
     @Transactional(rollbackFor = Exception.class)
     public void synInfo(Date startTime, Date endTime) {
         try {
@@ -60,6 +63,21 @@ public class PostProductService {
         // todo insert insertCloudStoreOrderList
         // todo insert insertOrderGoods
 
+    }
+
+    @Transactional
+    public void reload(int day) {
+        Calendar calendar = new GregorianCalendar();
+        Date now = new Date();
+        calendar.setTime(now);
+        int i = day;
+        calendar.add(Calendar.DATE, -day);
+        do {
+            synInfo(calendar.getTime(), calendar.getTime());
+            autoTaskRecordService.updateTime("postProductSender");
+            calendar.add(Calendar.DATE, 1);
+            --i;
+        } while(i >= 0);
     }
 
 }

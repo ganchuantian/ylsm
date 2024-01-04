@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,9 @@ public class ProductInfoService {
 
     @Autowired
     private ApiRequestProxyService proxyService;
+
+    @Autowired
+    private AutoTaskRecordService autoTaskRecordService;
 
     @Transactional(rollbackFor = Exception.class)
     public void synInfo(Date startTime, Date endTime) {
@@ -64,14 +69,23 @@ public class ProductInfoService {
         // todo insert insertList
     }
 
-    public static void main(String[] args) {
-        List<Integer> a = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            a.add(i);
-        }
-        log.info(String.valueOf(a.subList(0, 5)));
-        log.info(String.valueOf(a.subList(5, 10)));
+    @Transactional(rollbackFor = Exception.class)
+    public void reload(int day) {
+        Calendar calendar = new GregorianCalendar();
+        Date now = new Date();
+        calendar.setTime(now);
+        int i = day;
+        calendar.add(Calendar.DATE, -day);
+
+        do {
+            synInfo(calendar.getTime(), calendar.getTime());
+            this.autoTaskRecordService.updateTime("productInfoSender");
+            calendar.add(Calendar.DATE, 1);
+            --i;
+        } while(i >= 0);
     }
+
+
 
 
 }

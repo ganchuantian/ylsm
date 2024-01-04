@@ -27,12 +27,12 @@ public interface ApiFeignClient {
     /*库存同步接口*/
     @PostMapping("${docking.api.module.updateStock.route}")
     @YlsmToken("${docking.api.module.updateStock.method}")
-    String updateStock(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("channelCode") String channelCode, @RequestParam("jsonRequest") String jsonRequest);
+    ApiResult<Object> updateStock(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("channelCode") String channelCode, @RequestParam("jsonRequest") String jsonRequest);
 
     /*销售单接口*/
     @PostMapping("${docking.api.module.saleSheet.route}")
     @YlsmToken("${docking.api.module.saleSheet.method}")
-    String saleSheet(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("channelCode") String channelCode, @RequestParam("jsonRequest") String jsonRequest, @RequestParam("manualId") String manualId, @RequestParam("saleDate") String saleDate);
+    ApiResult<Object> saleSheet(@RequestParam("token") @TokenField String token, @RequestParam("tokenId") Integer tokenId, @RequestParam("channelCode") String channelCode, @RequestParam("jsonRequest") String jsonRequest, @RequestParam("manualId") String manualId, @RequestParam("saleDate") String saleDate);
 
     /*云仓单接口*/
     @PostMapping("${docking.api.module.cloundSender.route}")

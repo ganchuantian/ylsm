@@ -13,14 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class ApiController {
 
-    private ApiFeignClient apiFeignClient;
-
     private ApiRequestProxyService proxyService;
-
-    @Autowired(required = false)
-    public void setApiFeignClient(ApiFeignClient apiFeignClient) {
-        this.apiFeignClient = apiFeignClient;
-    }
 
     @Autowired
     public void setProxyService(ApiRequestProxyService apiRequestProxyService) {

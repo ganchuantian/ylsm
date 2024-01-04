@@ -74,19 +74,9 @@ public class TokenService {
     }
 
     private boolean refreshToken() {
-        String s = apiFeignClient.getTokenInfo(account, password);
-        if (StringUtils.isBlank(s)) {
-            log.error("request token/getTokenInfo api error, result is empty! account:{}, pass:{}, responseData:{}", account, password, s);
-            return false;
-        }
-        ApiResult<TokenModel> result = null;
-        try {
-            result = objectMapper.readValue(s, new TypeReference<ApiResult<TokenModel>>() {});
-        } catch (JsonProcessingException e) {
-            log.error("get token info result json deserialize error! account:{}, pass:{}, responseData:{}", account, password, s, e);
-        }
+        ApiResult<TokenModel> result = apiFeignClient.getTokenInfo(account, password);
         if (Objects.isNull(result) || !result.success() || Objects.isNull(result.getData())) {
-            log.error("get token info result error. account:{}, pass:{}, responseData:{}, result:{}", account, password, s, result);
+            log.error("get token info result error. account:{}, pass:{}, result:{}", account, password, result);
             return false;
         }
         BeanUtils.copyProperties(result.getData(), tokenInfo);
